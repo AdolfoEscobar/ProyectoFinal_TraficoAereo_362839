@@ -1,0 +1,10 @@
+numpy
+pandas
+matplotlib
+aiohttp
+requests
+mpi4py
+numba
+fpdf2
+python-dotenv
+# streamlit  # opcional, solo para el tablero interactivo

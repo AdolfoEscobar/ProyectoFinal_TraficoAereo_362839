@@ -1,0 +1,10 @@
+   [MPI] proceso 1/4: procesó 375 vuelos.
+   [MPI] proceso 0/4: procesó 375 vuelos.
+   [MPI] proceso 2/4: procesó 375 vuelos.
+   [MPI] proceso 3/4: procesó 375 vuelos.
+
+[MPI] 4 procesos terminaron en 0.020 s (1500 vuelos).
+[MPI] Activos: 502 | Cancelados: 89
+[MPI] Por región: {'Norteamérica': 666, 'Europa': 337, 'Latinoamérica': 355, 'Asia-Pacífico': 142}
+[MPI] Retraso promedio por aeropuerto: {'MEX': 15.09, 'JFK': 14.47, 'MTY': 13.28, 'MAD': 13.1, 'LAX': 14.4, 'GDL': 14.56, 'TIJ': 15.55, 'CUN': 14.07}
+[MPI] Verificación contra cálculo secuencial: CORRECTO ✔ (activos ref={'Norteamérica': 226, 'Latinoamérica': 124, 'Europa': 108, 'Asia-Pacífico': 44})

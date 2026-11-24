@@ -1,0 +1,7 @@
+ciudad,iata,temperatura,humedad,presion,viento_vel,visibilidad_m,condicion,lluvia
+Mexico City,MEX,21.4,79,1009,1.0,10000,Clouds,False
+Guadalajara,GDL,15.3,85,1010,3.7,10000,Clear,False
+Monterrey,MTY,21.0,50,1015,22.2,5000,Clear,False
+Cancun,CUN,25.4,89,1009,7.9,10000,Clear,False
+Madrid,MAD,18.6,87,1007,3.9,10000,Drizzle,True
+New York,JFK,19.8,74,1025,8.1,10000,Clouds,False

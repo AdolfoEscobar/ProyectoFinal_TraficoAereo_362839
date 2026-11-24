@@ -1,0 +1,79 @@
+{
+  "tiempos_descarga": {
+    "secuencial": 15.263,
+    "concurrente": 4.64,
+    "canales_secuencial": 3.608,
+    "canales_concurrente": 2.146
+  },
+  "fuentes": {
+    "vuelos": "simulado (sin API key)",
+    "sensores": "ThingSpeak (en vivo, 2 canales)",
+    "clima": "simulado (sin API key)",
+    "aire": "simulado (sin API key)"
+  },
+  "cancelados": {
+    "total": 89,
+    "porcentaje": 5.93
+  },
+  "velocidad_altitud": {
+    "n_activos": 502,
+    "velocidad_promedio_kmh": 779.9,
+    "altitud_promedio_ft": 33197.7
+  },
+  "outliers": {
+    "velocidad_kmh": {
+      "n": 2,
+      "z_max": 6.82
+    },
+    "altitud_ft": {
+      "n": 1,
+      "z_max": 6.63
+    },
+    "retraso_min": {
+      "n": 14,
+      "z_max": 12.19
+    }
+  },
+  "simulacion_MEX_MAD": {
+    "origen": "MEX",
+    "destino": "MAD",
+    "distancia_km": 9066.6,
+    "tiempo_estimado_h": 11.83,
+    "tiempo_estimado_min": 709
+  },
+  "benchmark_aceleracion": {
+    "tiempos": {
+      "python_puro": 0.0446,
+      "numpy": 0.0003,
+      "numba": 0.0003
+    },
+    "speedup_vs_python": {
+      "python_puro": 1.0,
+      "numpy": 139.1,
+      "numba": 133.0
+    },
+    "motor": "Numba (CPU, compilado JIT)"
+  },
+  "mpi": [
+    "[MPI] Retraso promedio por aeropuerto: {'MEX': 15.09, 'TIJ': 15.55, 'CUN': 14.8, 'JFK': 13.64, 'LAX': 14.4, 'MTY': 13.28, 'MAD': 13.1, 'GDL': 14.56}",
+    "[MPI] Verificación contra cálculo secuencial: CORRECTO ✔ (activos ref={'Norteamérica': 226, 'Latinoamérica': 124, 'Europa': 108, 'Asia-Pacífico': 44})",
+    "[MacBook-Air-de-Adolfo][[9576,0],0][btl_tcp_component.c:1021:mca_btl_tcp_component_create_listen] bind() failed: Operation not permitted (1)"
+  ],
+  "graficas": [
+    "grafica_vuelos_region.png",
+    "grafica_aerolineas.png",
+    "grafica_retrasos_aeropuerto.png",
+    "grafica_clima_retrasos.png",
+    "grafica_actividad_hora.png",
+    "grafica_velocidad_altitud.png",
+    "grafica_asyncio.png",
+    "grafica_sensores.png"
+  ],
+  "respuestas": {
+    "¿Hay relación entre clima y retrasos?": "Sí: el retraso promedio con lluvia es 33.4 min contra 8.0 min con cielo despejado.",
+    "¿Aumentan los retrasos con lluvia o baja visibilidad?": "La correlación lluvia-retraso es 0.575: positiva, los retrasos crecen con lluvia; además, con viento fuerte el promedio sube respecto al día despejado.",
+    "¿Qué aeropuertos presentan más retrasos?": "El aeropuerto con mayor retraso promedio es TIJ con 15.6 min por vuelo.",
+    "¿Cómo cambia la actividad aérea durante el día?": "La actividad sube desde las 6:00, tiene su pico a las 13:00 y baja de madrugada; el patrón se repite en todas las regiones.",
+    "¿Qué condiciones ambientales coinciden con mayor tráfico?": "Con más tráfico (horas pico) coinciden temperaturas altas y picos de PM2.5/PM10."
+  }
+}

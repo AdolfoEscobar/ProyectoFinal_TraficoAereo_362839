@@ -1,0 +1,189 @@
+
+======================================================================
+PASO 1: DESCARGA CONCURRENTE DE APIS (asyncio)
+======================================================================
+   [ThingSpeak] canal 12397 sin acceso ().
+Pipeline completo — secuencial: 15.26 s | concurrente: 4.64 s
+Canales ThingSpeak (red real) — secuencial: 3.61 s | concurrente: 2.15 s | Speedup asyncio: 1.68x
+Vuelos: 1500 registros [simulado (sin API key)]
+Sensores: 200 lecturas [ThingSpeak (en vivo, 2 canales)]
+Clima: 6 ciudades [simulado (sin API key)]
+Calidad del aire: 5 estaciones [simulado (sin API key)]
+
+======================================================================
+PASO 2: LIMPIEZA Y PREPARACIÓN (Pandas)
+======================================================================
+Vuelos limpios: 1500 (antes: 1500)
+Sensores limpios: 200 lecturas, columnas: ['created_at', 'entry_id', 'luz', 'temperatura_ext', 'tiempo', 'canal', 'viento_dir', 'viento_vel', 'humedad', 'temperatura', 'lluvia_in', 'presion']
+Tablas guardadas en resultados/*.csv
+
+======================================================================
+PASO 3: ANÁLISIS DE TRÁFICO AÉREO (12 análisis)
+======================================================================
+a) Vuelos activos por región:
+ region
+Norteamérica     226
+Latinoamérica    124
+Europa           108
+Asia-Pacífico     44
+
+b) Cancelados: 89 (5.93%)
+   Por aerolínea:
+ aerolinea
+Delta              18
+British Airways    16
+United             11
+VivaAerobus        11
+Aeromexico          9
+Volaris             9
+Iberia              8
+American            7
+
+c) Rutas más frecuentes:
+ ruta
+GDL-CUN    38
+GDL-TIJ    38
+TIJ-MTY    37
+GDL-LAX    36
+JFK-MAD    35
+LAX-JFK    34
+LAX-GDL    33
+GDL-MEX    33
+MTY-GDL    33
+LAX-CUN    33
+
+d) Vuelos por aerolínea:
+ aerolinea
+Volaris            201
+British Airways    200
+Iberia             192
+American           190
+Aeromexico         185
+VivaAerobus        182
+United             181
+Delta              169
+
+e) Salidas y llegadas por aeropuerto:
+      salidas  llegadas  total
+GDL      223       199    422
+LAX      210       189    399
+CUN      190       184    374
+JFK      200       172    372
+MTY      173       196    369
+MEX      164       197    361
+MAD      178       177    355
+TIJ      162       186    348
+
+f) En vuelo ahora: 502 aviones | velocidad prom: 779.9 km/h | altitud prom: 33197.7 ft
+
+g) Retrasos por aeropuerto:
+         retraso_promedio_min  retraso_max_min  n_vuelos
+origen                                                 
+TIJ                     15.6             51.6       150
+MEX                     15.1             63.7       158
+CUN                     14.8            175.0       173
+GDL                     14.6             62.1       215
+LAX                     14.4             72.2       197
+JFK                     13.6             56.8       188
+MTY                     13.3             59.8       157
+MAD                     13.1             50.1       173
+
+h) Retraso promedio según clima:
+                retraso_promedio_min  n_vuelos
+clima                                        
+lluvia                         33.4       203
+viento_fuerte                  26.5       103
+nublado                        13.1       344
+despejado                       8.0       761
+   Correlación lluvia-retraso: 0.575
+
+i) Hora pico de actividad: 13:00 (119 vuelos)
+
+j) Ficha del vuelo VUELO-1000: {'vuelo': 'VUELO-1000', 'origen': 'MEX', 'destino': 'MTY', 'ruta': 'MEX-MTY', 'aerolinea': 'United', 'region': 'Norteamérica', 'hora': 12, 'estado': 'programado', 'clima': 'nublado', 'retraso_min': 18.8, 'velocidad_kmh': 0.0, 'altitud_ft': 0.0}
+
+k) Simulación de ruta MEX→MAD: 9066.6 km, ~709 min de vuelo.
+
+l) Valores atípicos: {'velocidad_kmh': 2, 'altitud_ft': 1, 'retraso_min': 14} (detalle en JSON)
+
+======================================================================
+PASO 4: ANÁLISIS AMBIENTAL (sensores + clima + aire)
+======================================================================
+Estadísticos de sensores:
+        temperatura  temperatura_ext  humedad  presion     luz  viento_vel  viento_dir  lluvia_in
+count       100.00           100.00    100.0   100.00  200.00      100.00       100.0      100.0
+mean        -17.72             8.73      0.0  1017.08  136.35        5.41       166.4        0.0
+min         -17.72             0.56      0.0  1016.26    0.00        1.13         0.0        0.0
+max         -17.72            13.89      0.0  1017.61  340.00       10.62       203.0        0.0
+
+Clima por ciudad:
+      ciudad iata  temperatura  humedad  presion  viento_vel  visibilidad_m condicion  lluvia
+Mexico City  MEX         21.4       79     1009         1.0          10000    Clouds   False
+Guadalajara  GDL         15.3       85     1010         3.7          10000     Clear   False
+  Monterrey  MTY         21.0       50     1015        22.2           5000     Clear   False
+     Cancun  CUN         25.4       89     1009         7.9          10000     Clear   False
+     Madrid  MAD         18.6       87     1007         3.9          10000   Drizzle    True
+   New York  JFK         19.8       74     1025         8.1          10000    Clouds   False
+
+Calidad del aire por estación:
+   estacion  pm25  pm10   o3  no2
+  Santa Fe   9.5  33.3 47.3 10.4
+    Centro  28.7  77.3 41.0 25.7
+Aeropuerto   9.1  45.1 94.4 30.0
+     Norte  13.3  63.5 67.9 19.8
+       Sur  29.3  34.2 44.6 34.9
+
+======================================================================
+PASO 5: ACELERACIÓN NUMÉRICA (CuPy / Numba / NumPy)
+======================================================================
+Motor activo: Numba (CPU, compilado JIT)
+Tiempos (z-score, 300 mil datos): {'python_puro': 0.0446, 'numpy': 0.0003, 'numba': 0.0003}
+Speedup vs Python puro: {'python_puro': 1.0, 'numpy': 139.1, 'numba': 133.0}
+
+======================================================================
+PASO 6: PROCESAMIENTO DISTRIBUIDO (MPI, 4 procesos)
+======================================================================
+   [MPI] mpiexec no disponible aquí (14); usando 1 proceso.
+   [MPI] proceso 0/1: procesó 1500 vuelos.
+
+[MPI] 1 procesos terminaron en 0.014 s (1500 vuelos).
+[MPI] Activos: 502 | Cancelados: 89
+[MPI] Por región: {'Norteamérica': 666, 'Latinoamérica': 355, 'Europa': 337, 'Asia-Pacífico': 142}
+[MPI] Retraso promedio por aeropuerto: {'MEX': 15.09, 'TIJ': 15.55, 'CUN': 14.8, 'JFK': 13.64, 'LAX': 14.4, 'MTY': 13.28, 'MAD': 13.1, 'GDL': 14.56}
+[MPI] Verificación contra cálculo secuencial: CORRECTO ✔ (activos ref={'Norteamérica': 226, 'Latinoamérica': 124, 'Europa': 108, 'Asia-Pacífico': 44})
+[MacBook-Air-de-Adolfo][[9576,0],0][btl_tcp_component.c:1021:mca_btl_tcp_component_create_listen] bind() failed: Operation not permitted (1)
+
+
+======================================================================
+PASO 7: VISUALIZACIÓN (Matplotlib)
+======================================================================
+   gráfica: resultados/grafica_vuelos_region.png
+   gráfica: resultados/grafica_aerolineas.png
+   gráfica: resultados/grafica_retrasos_aeropuerto.png
+   gráfica: resultados/grafica_clima_retrasos.png
+   gráfica: resultados/grafica_actividad_hora.png
+   gráfica: resultados/grafica_velocidad_altitud.png
+   gráfica: resultados/grafica_asyncio.png
+   gráfica: resultados/grafica_sensores.png
+
+======================================================================
+PASO 8: RESPUESTAS A LAS 5 PREGUNTAS DEL PROYECTO
+======================================================================
+
+1. ¿Hay relación entre clima y retrasos?
+   → Sí: el retraso promedio con lluvia es 33.4 min contra 8.0 min con cielo despejado.
+
+2. ¿Aumentan los retrasos con lluvia o baja visibilidad?
+   → La correlación lluvia-retraso es 0.575: positiva, los retrasos crecen con lluvia; además, con viento fuerte el promedio sube respecto al día despejado.
+
+3. ¿Qué aeropuertos presentan más retrasos?
+   → El aeropuerto con mayor retraso promedio es TIJ con 15.6 min por vuelo.
+
+4. ¿Cómo cambia la actividad aérea durante el día?
+   → La actividad sube desde las 6:00, tiene su pico a las 13:00 y baja de madrugada; el patrón se repite en todas las regiones.
+
+5. ¿Qué condiciones ambientales coinciden con mayor tráfico?
+   → Con más tráfico (horas pico) coinciden temperaturas altas y picos de PM2.5/PM10.
+
+======================================================================
+PIPELINE COMPLETO en 27.7 s. Evidencias en: /Users/adolfo/Desktop/Computo Paralelo y Distribuido/ProyectoFinal_TraficoAereo_362839/resultados
+======================================================================
