@@ -178,6 +178,23 @@ def main():
                  "Sin claves de API, el sistema usa datos simulados realistas y "
                  "reproducibles (semilla 362839); ThingSpeak usa canales "
                  "públicos reales (canal 9 y estación MathWorks 12397)."])
+    pdf.h2("Justificación de las fuentes de datos")
+    pdf.parrafo("AirLabs: al momento de la entrega, el registro de cuenta nueva "
+                "quedó en lista de espera (waitlist), por lo que no fue posible "
+                "obtener una clave antes de la fecha límite. OpenWeather y "
+                "OpenAQ: ofrecen claves gratuitas, pero su activación tarda "
+                "(hasta 2 horas) y su disponibilidad depende de la red al "
+                "momento de la demostración.")
+    pdf.parrafo("Por eso el sistema se diseñó con doble modo desde el inicio: "
+                "intenta primero la API real y, si no hay clave o red, usa "
+                "datos simulados realistas con la misma estructura, "
+                "deterministas (semilla 362839) y etiquetando siempre la "
+                "fuente de cada resultado. ThingSpeak sí opera en vivo y "
+                "demuestra la integración real con la nube. El objetivo de la "
+                "materia (cómputo paralelo: asyncio, MPI, Numba) se evalúa "
+                "sobre el procesamiento, que es idéntico en ambos modos; en "
+                "cuanto se reciba la clave de AirLabs basta con agregarla al "
+                "archivo .env y re-ejecutar, sin cambiar código.")
 
     # ---- 3. Tecnologías paralelas ---------------------------------------
     pdf.add_page()
